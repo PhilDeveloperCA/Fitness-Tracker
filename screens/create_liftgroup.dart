@@ -30,7 +30,7 @@ class _CreateLiftGroupState extends State<CreateLiftGroup> {
 
   setdesription() {
     setState(() {
-      this.description = nameController.text;
+      this.description = descriptionController.text;
     });
   }
 

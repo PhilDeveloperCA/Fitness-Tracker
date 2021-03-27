@@ -14,6 +14,7 @@ class _GroupLiftsState extends State<GroupLifts> {
   int index = 0;
   @override
   Widget build(BuildContext context) {
+    print(widget.group.description);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

@@ -39,7 +39,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'notes5.db';
+    String path = directory.path + 'fitness.db';
 
     var notesDatabase = await openDatabase(path,
         version: 2, onCreate: _createDb, onConfigure: _configureDb);

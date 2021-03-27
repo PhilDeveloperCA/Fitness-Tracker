@@ -31,7 +31,7 @@ class _CreateTimeGroupState extends State<CreateTimeGroup> {
 
   setdesription() {
     setState(() {
-      this.description = nameController.text;
+      this.description = descriptionController.text;
     });
   }
 
