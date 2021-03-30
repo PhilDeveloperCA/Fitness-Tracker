@@ -56,4 +56,16 @@ class Lift {
 
   Lift.toGoal(this.liftgroup, this.weight, this.quantity, this.day, this.month,
       this.year);
+
+  static Future<List<Lift>> getLiftGoals(int group) async {
+    return await DatabaseHelper().getLiftGoals(group);
+  }
+
+  static SaveGoal(Lift lift) async {
+    return await DatabaseHelper().addLiftGoal(lift);
+  }
+
+  static DeleteGoal(int id) async {
+    return await DatabaseHelper().deleteLiftGoal(id);
+  }
 }

@@ -77,7 +77,7 @@ class _CreateLiftGroupState extends State<CreateLiftGroup> {
                   padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
                   child: TextFormField(
-                    validator: (value) => value.length < 3 || value.length > 20
+                    validator: (value) => value.length < 3 || value.length > 30
                         ? 'enter valid description'
                         : null,
                     controller: nameController,

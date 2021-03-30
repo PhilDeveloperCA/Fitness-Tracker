@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
               builder: (context, TimerGroupsSnapshot) {
                 if (!TimerGroupsSnapshot.hasData) return Container();
                 return SizedBox(
-                  height: 500,
+                  height: 250,
                   child: ListView.builder(
                     //shrinkWrap: true,
                     itemBuilder: (context, index) {
@@ -138,7 +138,7 @@ class _HomeState extends State<Home> {
             builder: (context, LiftGroupsSnapshot) {
               if (!LiftGroupsSnapshot.hasData) return Container();
               return SizedBox(
-                height: 500,
+                height: 250,
                 child: ListView.builder(
                   //shrinkWrap: true,
                   itemBuilder: (context, index) {
