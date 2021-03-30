@@ -57,77 +57,82 @@ class _CreateTimeGroupState extends State<CreateTimeGroup> {
       ),
       body: Form(
         key: _form,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                      alignment: Alignment.bottomLeft,
+                      padding:
+                          EdgeInsets.only(top: 10.0, bottom: 0.0, left: 5.0),
+                      child: Text(
+                        'Name:',
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          letterSpacing: 2.0,
+                          color: Colors.blue[500],
+                        ),
+                      )),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
+                    child: TextFormField(
+                      validator: (value) =>
+                          value.length < 3 || value.length > 30
+                              ? 'enter valid description'
+                              : null,
+                      controller: nameController,
+                    ),
+                  ),
+                  Container(
                     alignment: Alignment.bottomLeft,
-                    padding: EdgeInsets.only(top: 10.0, bottom: 0.0, left: 5.0),
+                    padding:
+                        EdgeInsets.only(top: 10.0, bottom: 25.0, left: 5.0),
                     child: Text(
-                      'Name:',
+                      'Desription:',
                       style: TextStyle(
-                        fontSize: 22.0,
-                        letterSpacing: 2.0,
-                        color: Colors.blue[500],
-                      ),
-                    )),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
-                  child: TextFormField(
-                    validator: (value) => value.length < 3 || value.length > 20
-                        ? 'enter valid description'
-                        : null,
-                    controller: nameController,
+                          color: Colors.blue[500],
+                          fontSize: 22.0,
+                          letterSpacing: 2.0),
+                    ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.bottomLeft,
-                  padding: EdgeInsets.only(top: 10.0, bottom: 25.0, left: 5.0),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                    child: TextFormField(
+                      validator: (value) =>
+                          value.length < 3 ? 'enter valid description' : null,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 10,
+                      textInputAction: TextInputAction.newline,
+                      controller: descriptionController,
+                      decoration: InputDecoration.collapsed(
+                          hintText: 'Description for this workout : ',
+                          border: OutlineInputBorder()),
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: _saveForm,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  margin: EdgeInsets.symmetric(vertical: 50.0),
+                  color: Colors.blue[600],
                   child: Text(
-                    'Desription:',
+                    'Submit',
                     style: TextStyle(
-                        color: Colors.blue[500],
-                        fontSize: 22.0,
-                        letterSpacing: 2.0),
+                        color: Colors.black87,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
                   ),
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                  child: TextFormField(
-                    validator: (value) =>
-                        value.length < 3 ? 'enter valid description' : null,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 10,
-                    textInputAction: TextInputAction.newline,
-                    controller: descriptionController,
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'Description for this workout : ',
-                        border: OutlineInputBorder()),
-                  ),
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: _saveForm,
-              child: Container(
-                padding: EdgeInsets.all(5.0),
-                margin: EdgeInsets.symmetric(vertical: 50.0),
-                color: Colors.blue[600],
-                child: Text(
-                  'Submit',
-                  style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

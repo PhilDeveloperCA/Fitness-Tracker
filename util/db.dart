@@ -36,6 +36,8 @@ class DatabaseHelper {
   static const liftgroup = 'lift_group';
   static const time = 'times';
   static const lift = 'lifts';
+  static const lift_goals = 'liftgoals';
+  static const time_goals = 'timegoals';
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
@@ -63,6 +65,14 @@ class DatabaseHelper {
         '''CREATE TABLE $lift(${Lift.col_id} INTEGER PRIMARY KEY, ${Lift.col_lift_group} INTEGER, ${Lift.col_weight} INTEGER, ${Lift.col_quantity} INTEGER, 
                 ${Lift.col_day} INTEGER, ${Lift.col_month} INTEGER, ${Lift.col_year} INTEGER, 
                       FOREIGN KEY(${Lift.col_lift_group}) REFERENCES $liftgroup(id) ON DELETE CASCADE)''');
+    await db.execute(
+        '''CREATE TABLE $time_goals(${Time.col_id} INTEGER PRIMARY KEY, ${Time.col_time_group} INTEGER, ${Time.col_seconds} INTEGER, 
+                ${Time.col_day} INTEGER, ${Time.col_month} INTEGER, ${Time.col_year} INTEGER, 
+                      FOREIGN KEY(${Time.col_time_group}) REFERENCES $timedgroup(id) ON DELETE CASCADE)''');
+    await db.execute(
+        '''CREATE TABLE $lift_goals(${Lift.col_id} INTEGER PRIMARY KEY, ${Lift.col_lift_group} INTEGER, ${Lift.col_weight} INTEGER, ${Lift.col_quantity} INTEGER, 
+                ${Lift.col_day} INTEGER, ${Lift.col_month} INTEGER, ${Lift.col_year} INTEGER, 
+                      FOREIGN KEY(${Lift.col_lift_group}) REFERENCES $liftgroup(id) ON DELETE CASCADE)''');
   }
 
   Future<int> getMaxId(String tablename) async {
@@ -71,6 +81,7 @@ class DatabaseHelper {
         await db.rawQuery('SELECT MAX(id) FROM $tablename ');
     dynamic id = map[0]['MAX(id)'];
     id = id == null ? 1 : id + 1;
+    return id;
   }
 
   addTimeGroup(TimeGroup timegroup) async {
@@ -139,6 +150,42 @@ class DatabaseHelper {
   Future<List<Time>> getTimes(int group_id) async {
     Database db = await database;
     List<Map<String, dynamic>> timemaps = await db.query(time,
+        where: '${Time.col_time_group} = ?', whereArgs: [group_id]);
+    return timemaps.map((timemap) => Time.fromMap(timemap)).toList();
+  }
+
+  addTimeGoal(Time new_time) async {
+    new_time.id = await getMaxId(time_goals);
+    Database db = await database;
+    await db.insert(time_goals, new_time.toMap());
+  }
+
+  deleteTimeGoal(int time_id) async {
+    Database db = await database;
+    await db.delete(time_goals, where: 'id = ?', whereArgs: [time_id]);
+  }
+
+  addLiftGoal(Lift new_lift) async {
+    new_lift.id = await getMaxId(lift_goals);
+    Database db = await database;
+    await db.insert(lift_goals, new_lift.toMap());
+  }
+
+  deleteLiftGoal(int id) async {
+    Database db = await database;
+    await db.delete(lift_goals, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Lift>> getLiftGoals(int group_id) async {
+    Database db = await database;
+    List<Map<String, dynamic>> liftmaps = await db.query(lift_goals,
+        where: '${Lift.col_lift_group} = ? ', whereArgs: [group_id]);
+    return liftmaps.map((liftmap) => Lift.fromMap(liftmap)).toList();
+  }
+
+  Future<List<Time>> getTimeGoals(int group_id) async {
+    Database db = await database;
+    List<Map<String, dynamic>> timemaps = await db.query(time_goals,
         where: '${Time.col_time_group} = ?', whereArgs: [group_id]);
     return timemaps.map((timemap) => Time.fromMap(timemap)).toList();
   }

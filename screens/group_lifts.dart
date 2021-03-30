@@ -12,9 +12,54 @@ class GroupLifts extends StatefulWidget {
 
 class _GroupLiftsState extends State<GroupLifts> {
   int index = 0;
+  int weight = 0;
+  int reps = 0;
+  final _weightController = TextEditingController();
+  final _repController = TextEditingController();
+
+  void weightControls() {
+    if (_weightController.text != '') {
+      setState(() {
+        this.weight = int.parse(_weightController.text);
+      });
+    }
+  }
+
+  void repControls() {
+    if (_repController.text != '') {
+      setState(() {
+        this.reps = int.parse(_repController.text);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _repController.addListener(repControls);
+    _weightController.addListener(weightControls);
+  }
+
+  void SubmitGoal() async {
+    await Lift.SaveGoal(new Lift(widget.group.id, this.weight, this.reps));
+
+    _repController.clear();
+    _weightController.clear();
+    setState(() {
+      this.weight = 0;
+      this.reps = 0;
+    });
+  }
+
+  @override
+  void dispose() {
+    _repController.dispose();
+    _weightController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.group.description);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -44,7 +89,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                 return Container();
               else
                 return SizedBox(
-                  height: 500,
+                  height: 400,
                   child: ListView.builder(
                     itemBuilder: (context, index) => Column(
                       children: <Widget>[
@@ -95,65 +140,133 @@ class _GroupLiftsState extends State<GroupLifts> {
         ],
       );
     } else
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: Text(
-                  'Overview / Goals ',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 20.0,
-                  ),
-                ),
-                padding: EdgeInsets.only(top: 20.0),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 45.0, left: 20.0),
-                child: Text(
-                  'Description : ',
-                  style: TextStyle(
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Text(
+                    'Overview / Goals ',
+                    style: TextStyle(
                       color: Colors.black87,
                       fontSize: 20.0,
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  padding: EdgeInsets.only(top: 20.0),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 15.0),
-                child: Text('${widget.group.description} ',
+                Container(
+                  padding: EdgeInsets.only(top: 20.0, left: 20.0),
+                  child: Text(
+                    'Description : ',
                     style: TextStyle(
-                      color: Colors.black45,
-                      fontSize: 16.0,
-                    )),
-              )
-            ],
-          ),
-          bottom(),
-        ],
+                        color: Colors.black87,
+                        fontSize: 20.0,
+                        letterSpacing: 2.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  child: Text('${widget.group.description} ',
+                      style: TextStyle(
+                        color: Colors.black45,
+                        fontSize: 16.0,
+                      )),
+                )
+              ],
+            ),
+            Text('Goals : '),
+            Container(
+              child: FutureBuilder(
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData)
+                    return Container();
+                  else
+                    return SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => Column(
+                          children: <Widget>[
+                            Container(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      '${snapshot.data[index].weight} x ${snapshot.data[index].quantity}'),
+                                  TextButton(
+                                      onPressed: () {
+                                        Lift.DeleteGoal(
+                                            snapshot.data[index].id);
+                                        setState(() {});
+                                      },
+                                      child: Text('Delete on Reload'))
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        itemCount: snapshot.data.length,
+                      ),
+                    );
+                },
+                future: Lift.getLiftGoals(widget.group.id),
+              ),
+            ),
+            Form(
+              child: Column(
+                children: [
+                  Text('Add New Goal : '),
+                  TextFormField(
+                    controller: _weightController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Weight',
+                    ),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _repController,
+                    decoration: InputDecoration(
+                      labelText: 'Reps',
+                    ),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      SubmitGoal();
+                    },
+                    child: Text('Submit'),
+                  ),
+                ],
+              ),
+            ),
+            bottom(),
+          ],
+        ),
       );
   }
 
   Widget bottom() {
     return BottomNavigationBar(
-        currentIndex: this.index,
-        onTap: (index) {
-          setState(() {
-            this.index = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Overview',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.details),
-            label: 'Records',
-          ),
-        ]);
+      currentIndex: this.index,
+      onTap: (index) {
+        setState(() {
+          this.index = index;
+        });
+      },
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Overview',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.details),
+          label: 'Records',
+        ),
+      ],
+    );
   }
 }

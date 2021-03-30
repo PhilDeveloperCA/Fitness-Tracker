@@ -46,8 +46,20 @@ class Time {
     this.year = map['year'];
   }
 
+  static saveGoal(Time time) async {
+    await DatabaseHelper().addTimeGoal(time);
+  }
+
   static Future<List<Time>> getTimes(int group_id) async {
     return await DatabaseHelper().getTimes(group_id);
+  }
+
+  static Future<List<Time>> getGoals(int group_id) async {
+    return await DatabaseHelper().getTimeGoals(group_id);
+  }
+
+  static DeleteGoal(int id) async {
+    return await DatabaseHelper().deleteTimeGoal(id);
   }
 
   Time.toGoal(this.time_group, this.seconds, this.day, this.month, this.year);
