@@ -226,6 +226,11 @@ class _GroupTimesState extends State<GroupTimes> {
                         labelText: 'Seconds : ',
                       ),
                     ),
+                    FloatingActionButton(
+                        onPressed: () {
+                          handleSubmit();
+                        },
+                        child: Text('Submit'))
                   ],
                 ))
               ],
