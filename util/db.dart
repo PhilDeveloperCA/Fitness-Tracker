@@ -92,7 +92,6 @@ class DatabaseHelper {
 
   deleteTimeGroup(int id) async {
     Database db = await database;
-    print('$id');
     db.delete(timedgroup, where: 'id = ?', whereArgs: [id]);
   }
 

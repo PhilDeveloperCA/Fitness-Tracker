@@ -85,10 +85,8 @@ class _GroupLiftsState extends State<GroupLifts> {
                           backgroundColor: Colors.red[500],
                           onPressed: () async {
                             await LiftGroup.deleteGroup(widget.group.id);
-                            Navigator.pushNamed(
-                              context,
-                              RouteNames.home,
-                            );
+                            Navigator.pushNamed(context, RouteNames.home,
+                                arguments: 1);
                           },
                           label: Text('Yes'),
                           icon: Icon(
@@ -104,7 +102,7 @@ class _GroupLiftsState extends State<GroupLifts> {
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
-              Navigator.pushNamed(context, RouteNames.home);
+              Navigator.pushNamed(context, RouteNames.home, arguments: 1);
             },
           ),
         ],
@@ -196,7 +194,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                   child: Text(
                     'Overview / Goals ',
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Colors.redAccent,
                       fontSize: 20.0,
                     ),
                   ),
@@ -207,7 +205,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                   child: Text(
                     'Description : ',
                     style: TextStyle(
-                        color: Colors.black87,
+                        color: Colors.redAccent,
                         fontSize: 20.0,
                         letterSpacing: 2.0,
                         fontWeight: FontWeight.bold),
@@ -217,7 +215,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                   padding: EdgeInsets.symmetric(vertical: 15.0),
                   child: Text('${widget.group.description} ',
                       style: TextStyle(
-                        color: Colors.black45,
+                        color: Colors.redAccent,
                         fontSize: 16.0,
                       )),
                 )

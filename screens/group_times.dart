@@ -19,21 +19,22 @@ class _GroupTimesState extends State<GroupTimes> {
   final _secondsController = TextEditingController();
 
   void handleMins() {
-    if (_minutesController.text == null) return;
+    if (_minutesController.text == '') return;
     setState(() {
       this.minutes = int.parse(_minutesController.text);
     });
   }
 
   void handleSecs() {
-    if (_secondsController.text == null) return;
+    if (_secondsController.text == '') return;
     setState(() {
       this.seconds = int.parse(_secondsController.text);
     });
   }
 
-  void handleSubmit() {
-    Time.saveGoal(new Time(widget.group.id, this.seconds + this.minutes * 60));
+  void handleSubmit() async {
+    await Time.saveGoal(
+        new Time(widget.group.id, this.seconds + this.minutes * 60));
     _secondsController.clear();
     _minutesController.clear();
     setState(() {
@@ -194,7 +195,7 @@ class _GroupTimesState extends State<GroupTimes> {
                   child: Text(
                     'Overview / Goals ',
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Colors.redAccent,
                       fontSize: 20.0,
                     ),
                   ),
@@ -205,7 +206,7 @@ class _GroupTimesState extends State<GroupTimes> {
                   child: Text(
                     'Description : ',
                     style: TextStyle(
-                        color: Colors.black87,
+                        color: Colors.redAccent,
                         fontSize: 20.0,
                         letterSpacing: 2.0,
                         fontWeight: FontWeight.bold),
@@ -215,7 +216,7 @@ class _GroupTimesState extends State<GroupTimes> {
                   padding: EdgeInsets.symmetric(vertical: 15.0),
                   child: Text('${widget.group.description} ',
                       style: TextStyle(
-                        color: Colors.black45,
+                        color: Colors.redAccent,
                         fontSize: 16.0,
                       )),
                 ),
