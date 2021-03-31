@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stopwatch_app/models/lift_group.dart';
 import 'package:stopwatch_app/models/time.dart';
 import 'package:stopwatch_app/models/time_group.dart';
 import 'package:stopwatch_app/util/route_names.dart';
@@ -60,7 +61,45 @@ class _GroupTimesState extends State<GroupTimes> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.group.name}'),
+        automaticallyImplyLeading: false,
         actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      actionsOverflowButtonSpacing: 20.0,
+                      title: Text(
+                          'Are You Sure you Want to Delete ${widget.group.name}'),
+                      actions: <Widget>[
+                        FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('No '),
+                        ),
+                        FloatingActionButton.extended(
+                          foregroundColor: Colors.yellow[300],
+                          backgroundColor: Colors.red[500],
+                          onPressed: () async {
+                            await TimeGroup.deleteGroup(widget.group.id);
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.home,
+                            );
+                          },
+                          label: Text('Yes'),
+                          icon: Icon(
+                            Icons.warning,
+                          ),
+                        )
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(Icons.delete),
+          ),
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
@@ -104,8 +143,9 @@ class _GroupTimesState extends State<GroupTimes> {
                                   '${TimeSnapshot.data[index].seconds ~/ 60} : ${TimeSnapshot.data[index].seconds % 60}'),
                               IconButton(
                                 icon: Icon(Icons.delete),
-                                onPressed: () {
+                                onPressed: () async {
                                   Time.deleteTime(TimeSnapshot.data[index].id);
+                                  setState(() {});
                                 },
                                 color: Colors.red[400],
                               )
@@ -161,7 +201,7 @@ class _GroupTimesState extends State<GroupTimes> {
                   padding: EdgeInsets.only(top: 20.0),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 45.0, left: 20.0),
+                  padding: EdgeInsets.only(top: 20.0, left: 20.0),
                   child: Text(
                     'Description : ',
                     style: TextStyle(

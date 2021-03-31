@@ -65,6 +65,43 @@ class _GroupLiftsState extends State<GroupLifts> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      actionsOverflowButtonSpacing: 20.0,
+                      title: Text(
+                          'Are You Sure you Want to Delete ${widget.group.name}'),
+                      actions: <Widget>[
+                        FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('No '),
+                        ),
+                        FloatingActionButton.extended(
+                          foregroundColor: Colors.yellow[300],
+                          backgroundColor: Colors.red[500],
+                          onPressed: () async {
+                            await LiftGroup.deleteGroup(widget.group.id);
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.home,
+                            );
+                          },
+                          label: Text('Yes'),
+                          icon: Icon(
+                            Icons.warning,
+                          ),
+                        )
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(Icons.delete),
+          ),
+          IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
               Navigator.pushNamed(context, RouteNames.home);
@@ -110,6 +147,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
                                   Lift.deleteLift(TimeSnapshot.data[index].id);
+                                  setState(() {});
                                 },
                                 color: Colors.red[400],
                               )
