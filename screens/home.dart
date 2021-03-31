@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
   }
 
   Widget BodyWidget(int i) {
-    print(widget.index);
     if (i == 0)
       return TimerGroups();
     else
@@ -83,7 +82,7 @@ class _HomeState extends State<Home> {
                                   },
                                   label: Text('Details'),
                                   icon: Icon(
-                                    Icons.details,
+                                    Icons.info,
                                     semanticLabel: 'See Details',
                                   ),
                                 ),
@@ -170,7 +169,7 @@ class _HomeState extends State<Home> {
                                 },
                                 label: Text('Details'),
                                 icon: Icon(
-                                  Icons.details,
+                                  Icons.info,
                                   semanticLabel: 'See Details',
                                 ),
                               ),

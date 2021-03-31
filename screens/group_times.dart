@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stopwatch_app/models/lift_group.dart';
 import 'package:stopwatch_app/models/time.dart';
 import 'package:stopwatch_app/models/time_group.dart';
 import 'package:stopwatch_app/util/route_names.dart';
@@ -60,7 +61,45 @@ class _GroupTimesState extends State<GroupTimes> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.group.name}'),
+        automaticallyImplyLeading: false,
         actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      actionsOverflowButtonSpacing: 20.0,
+                      title: Text(
+                          'Are You Sure you Want to Delete ${widget.group.name}'),
+                      actions: <Widget>[
+                        FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('No '),
+                        ),
+                        FloatingActionButton.extended(
+                          foregroundColor: Colors.yellow[300],
+                          backgroundColor: Colors.red[500],
+                          onPressed: () async {
+                            await TimeGroup.deleteGroup(widget.group.id);
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.home,
+                            );
+                          },
+                          label: Text('Yes'),
+                          icon: Icon(
+                            Icons.warning,
+                          ),
+                        )
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(Icons.delete),
+          ),
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
@@ -78,7 +117,7 @@ class _GroupTimesState extends State<GroupTimes> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(padding: EdgeInsets.only(top: 50)),
+          Padding(padding: EdgeInsets.only(top: 0)),
           FutureBuilder(
             builder: (context, TimeSnapshot) {
               if (TimeSnapshot.hasData == false)
@@ -91,7 +130,7 @@ class _GroupTimesState extends State<GroupTimes> {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 15.0),
+                              vertical: 10.0, horizontal: 15.0),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.blueAccent),
                           ),
@@ -101,7 +140,15 @@ class _GroupTimesState extends State<GroupTimes> {
                               Text(
                                   '${TimeSnapshot.data[index].month} - ${TimeSnapshot.data[index].day} - ${TimeSnapshot.data[index].year}'),
                               Text(
-                                  '${TimeSnapshot.data[index].seconds ~/ 60} : ${TimeSnapshot.data[index].seconds % 60}')
+                                  '${TimeSnapshot.data[index].seconds ~/ 60} : ${TimeSnapshot.data[index].seconds % 60}'),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  Time.deleteTime(TimeSnapshot.data[index].id);
+                                  setState(() {});
+                                },
+                                color: Colors.red[400],
+                              )
                             ],
                           ),
                         ),
@@ -154,7 +201,7 @@ class _GroupTimesState extends State<GroupTimes> {
                   padding: EdgeInsets.only(top: 20.0),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 45.0, left: 20.0),
+                  padding: EdgeInsets.only(top: 20.0, left: 20.0),
                   child: Text(
                     'Description : ',
                     style: TextStyle(
@@ -226,11 +273,14 @@ class _GroupTimesState extends State<GroupTimes> {
                         labelText: 'Seconds : ',
                       ),
                     ),
-                    FloatingActionButton(
-                        onPressed: () {
-                          handleSubmit();
-                        },
-                        child: Text('Submit'))
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5.0),
+                      child: FloatingActionButton(
+                          onPressed: () {
+                            handleSubmit();
+                          },
+                          child: Text('Submit')),
+                    )
                   ],
                 ))
               ],

@@ -54,6 +54,10 @@ class Lift {
     return await DatabaseHelper().getLifts(group);
   }
 
+  static deleteLift(int id) async {
+    await DatabaseHelper().deleteLift(id);
+  }
+
   Lift.toGoal(this.liftgroup, this.weight, this.quantity, this.day, this.month,
       this.year);
 

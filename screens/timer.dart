@@ -127,12 +127,14 @@ class _WatchState extends State<Watch> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 FloatingActionButton(
+                  heroTag: 1,
                   onPressed: () {
                     watch.reset();
                   },
                   child: Icon(Icons.fast_rewind),
                 ),
                 FloatingActionButton(
+                  heroTag: 2,
                   onPressed: () {
                     watch.start();
                     setState(() {
@@ -147,6 +149,7 @@ class _WatchState extends State<Watch> {
           Container(
             padding: EdgeInsets.only(top: 50.0),
             child: FloatingActionButton(
+                heroTag: 3,
                 onPressed: () async {
                   watch.start();
                   await Time.saveTime(new Time(widget.group.id, this.seconds));
@@ -168,11 +171,13 @@ class _WatchState extends State<Watch> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           FloatingActionButton(
+              heroTag: 4,
               onPressed: () {
                 watch.reset();
               },
               child: Icon(Icons.fast_rewind)),
           FloatingActionButton(
+              heroTag: 5,
               onPressed: () {
                 watch.stop();
                 setState(() {

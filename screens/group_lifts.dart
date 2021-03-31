@@ -65,6 +65,43 @@ class _GroupLiftsState extends State<GroupLifts> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      actionsOverflowButtonSpacing: 20.0,
+                      title: Text(
+                          'Are You Sure you Want to Delete ${widget.group.name}'),
+                      actions: <Widget>[
+                        FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('No '),
+                        ),
+                        FloatingActionButton.extended(
+                          foregroundColor: Colors.yellow[300],
+                          backgroundColor: Colors.red[500],
+                          onPressed: () async {
+                            await LiftGroup.deleteGroup(widget.group.id);
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.home,
+                            );
+                          },
+                          label: Text('Yes'),
+                          icon: Icon(
+                            Icons.warning,
+                          ),
+                        )
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(Icons.delete),
+          ),
+          IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
               Navigator.pushNamed(context, RouteNames.home);
@@ -95,7 +132,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 15.0),
+                              vertical: 10.0, horizontal: 15.0),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.blueAccent),
                           ),
@@ -105,7 +142,15 @@ class _GroupLiftsState extends State<GroupLifts> {
                               Text(
                                   '${TimeSnapshot.data[index].month} - ${TimeSnapshot.data[index].day} - ${TimeSnapshot.data[index].year}'),
                               Text(
-                                  '${TimeSnapshot.data[index].weight}  x  ${TimeSnapshot.data[index].quantity}')
+                                  '${TimeSnapshot.data[index].weight}  x  ${TimeSnapshot.data[index].quantity}'),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  Lift.deleteLift(TimeSnapshot.data[index].id);
+                                  setState(() {});
+                                },
+                                color: Colors.red[400],
+                              )
                             ],
                           ),
                         ),
@@ -203,7 +248,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                                             snapshot.data[index].id);
                                         setState(() {});
                                       },
-                                      child: Text('Delete on Reload'))
+                                      child: Text('Delete'))
                                 ],
                               ),
                             )
@@ -234,11 +279,14 @@ class _GroupLiftsState extends State<GroupLifts> {
                       labelText: 'Reps',
                     ),
                   ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      SubmitGoal();
-                    },
-                    child: Text('Submit'),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        SubmitGoal();
+                      },
+                      child: Text('Submit'),
+                    ),
                   ),
                 ],
               ),
