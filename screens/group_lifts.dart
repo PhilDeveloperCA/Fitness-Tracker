@@ -95,7 +95,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 15.0),
+                              vertical: 10.0, horizontal: 15.0),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.blueAccent),
                           ),
@@ -105,7 +105,14 @@ class _GroupLiftsState extends State<GroupLifts> {
                               Text(
                                   '${TimeSnapshot.data[index].month} - ${TimeSnapshot.data[index].day} - ${TimeSnapshot.data[index].year}'),
                               Text(
-                                  '${TimeSnapshot.data[index].weight}  x  ${TimeSnapshot.data[index].quantity}')
+                                  '${TimeSnapshot.data[index].weight}  x  ${TimeSnapshot.data[index].quantity}'),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  Lift.deleteLift(TimeSnapshot.data[index].id);
+                                },
+                                color: Colors.red[400],
+                              )
                             ],
                           ),
                         ),
@@ -203,7 +210,7 @@ class _GroupLiftsState extends State<GroupLifts> {
                                             snapshot.data[index].id);
                                         setState(() {});
                                       },
-                                      child: Text('Delete on Reload'))
+                                      child: Text('Delete'))
                                 ],
                               ),
                             )
@@ -234,11 +241,14 @@ class _GroupLiftsState extends State<GroupLifts> {
                       labelText: 'Reps',
                     ),
                   ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      SubmitGoal();
-                    },
-                    child: Text('Submit'),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        SubmitGoal();
+                      },
+                      child: Text('Submit'),
+                    ),
                   ),
                 ],
               ),

@@ -26,6 +26,10 @@ class Time {
     };
   }
 
+  static deleteTime(int id) async {
+    await DatabaseHelper().deleteTime(id);
+  }
+
   static saveTime(Time time) async {
     await DatabaseHelper().addTime(time);
   }

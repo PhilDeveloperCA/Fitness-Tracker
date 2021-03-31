@@ -78,7 +78,7 @@ class _GroupTimesState extends State<GroupTimes> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(padding: EdgeInsets.only(top: 50)),
+          Padding(padding: EdgeInsets.only(top: 0)),
           FutureBuilder(
             builder: (context, TimeSnapshot) {
               if (TimeSnapshot.hasData == false)
@@ -91,7 +91,7 @@ class _GroupTimesState extends State<GroupTimes> {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 15.0),
+                              vertical: 10.0, horizontal: 15.0),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.blueAccent),
                           ),
@@ -101,7 +101,14 @@ class _GroupTimesState extends State<GroupTimes> {
                               Text(
                                   '${TimeSnapshot.data[index].month} - ${TimeSnapshot.data[index].day} - ${TimeSnapshot.data[index].year}'),
                               Text(
-                                  '${TimeSnapshot.data[index].seconds ~/ 60} : ${TimeSnapshot.data[index].seconds % 60}')
+                                  '${TimeSnapshot.data[index].seconds ~/ 60} : ${TimeSnapshot.data[index].seconds % 60}'),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  Time.deleteTime(TimeSnapshot.data[index].id);
+                                },
+                                color: Colors.red[400],
+                              )
                             ],
                           ),
                         ),
@@ -226,11 +233,14 @@ class _GroupTimesState extends State<GroupTimes> {
                         labelText: 'Seconds : ',
                       ),
                     ),
-                    FloatingActionButton(
-                        onPressed: () {
-                          handleSubmit();
-                        },
-                        child: Text('Submit'))
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5.0),
+                      child: FloatingActionButton(
+                          onPressed: () {
+                            handleSubmit();
+                          },
+                          child: Text('Submit')),
+                    )
                   ],
                 ))
               ],
