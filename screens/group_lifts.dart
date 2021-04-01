@@ -4,6 +4,7 @@ import 'package:stopwatch_app/models/lift_group.dart';
 import 'package:stopwatch_app/util/route_names.dart';
 
 class GroupLifts extends StatefulWidget {
+  int index = 0;
   LiftGroup group;
   GroupLifts(this.group);
   @override
@@ -11,7 +12,6 @@ class GroupLifts extends StatefulWidget {
 }
 
 class _GroupLiftsState extends State<GroupLifts> {
-  int index = 0;
   int weight = 0;
   int reps = 0;
   final _weightController = TextEditingController();
@@ -42,7 +42,7 @@ class _GroupLiftsState extends State<GroupLifts> {
 
   void SubmitGoal() async {
     await Lift.SaveGoal(new Lift(widget.group.id, this.weight, this.reps));
-
+    FocusScope.of(context).unfocus();
     _repController.clear();
     _weightController.clear();
     setState(() {
@@ -113,7 +113,7 @@ class _GroupLiftsState extends State<GroupLifts> {
   }
 
   Widget mainbody() {
-    if (this.index == 1) {
+    if (widget.index == 1) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -297,10 +297,10 @@ class _GroupLiftsState extends State<GroupLifts> {
 
   Widget bottom() {
     return BottomNavigationBar(
-      currentIndex: this.index,
+      currentIndex: widget.index,
       onTap: (index) {
         setState(() {
-          this.index = index;
+          widget.index = index;
         });
       },
       items: [
