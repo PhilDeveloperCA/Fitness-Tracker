@@ -7,6 +7,7 @@ import 'package:stopwatch_app/util/route_names.dart';
 
 class Home extends StatefulWidget {
   int index = 0;
+  Home({this.index = 0});
   _HomeState createState() => _HomeState();
 }
 
